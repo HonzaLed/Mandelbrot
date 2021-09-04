@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="./jquery.min.js"></script>
+        <script src="./bootstrap.bundle.min.js"></script>
+        <title>Mandelbrot plotter</title>
+        <script>
+            function load() {
+                conf = JSON.parse(prompt("Please enter JSON configuration"));
+                WIDTH_D = conf.WIDTH;
+                HEIGHT_D = conf.HEIGHT;
+                WIDTH_END = conf.WIDTH;
+                HEIGHT_END = conf.HEIGHT;
+                RE_START_D = conf.RE_START;
+                RE_END_D = conf.RE_END;
+                IM_START_D = conf.IM_START;
+                IM_END_D = conf.IM_END;
+                FILENAME = conf.FILENAME
+                //$("#image")[0].src = "./"+FILENAME
+                modeStart = true;
+                WIDTH_START = 0;
+                HEIGHT_START = 0;
+                startDraw();
+            }
+
+            function changeMode() {
+                if (modeStart) {
+                    modeStart = false;
+                    $("#mode")[0].innerText = "end";
+                } else {
+                    modeStart = true;
+                    $("#mode")[0].innerText = "start";
+                }
+            }
+
+            $(function(){
+                $("#Canvas").click(function(e){
+                    $('#coordinates').html('x: ' + e.pageX + ' y : ' + e.pageY);
+                    //code = 'WIDTH = '+WIDTH+'<br>HEIGHT = '+HEIGHT+'<br>RE_START = '+RE_START+'<br>RE_END = '+RE_END+'<br>IM_START = '+IM_START+'<br>IM_END = '+IM_END;
+                });
+            })
+
+            function calculate(X, Y) {
+                if (modeStart) {
+                    RE_START = RE_START_D+(X/WIDTH_D)*(RE_END_D-RE_START_D);
+                    IM_START = IM_START_D + (Y / HEIGHT_D) * (IM_END_D - IM_START_D);
+                    WIDTH_START = X;
+                    HEIGHT_START = Y;
+                } else {
+                    RE_END = RE_START_D+(X/WIDTH_D)*(RE_END_D-RE_START_D);
+                    IM_END = IM_START_D + (Y / HEIGHT_D) * (IM_END_D - IM_START_D);
+                    WIDTH_END = X;
+                    HEIGHT_END = Y;
+                }
+                WIDTH = WIDTH_END - WIDTH_START;
+                HEIGHT = HEIGHT_END - HEIGHT_START;
+                if (HEIGHT > WIDTH) {
+                    SCALE = WIDTH_D/WIDTH;
+                } else {
+                    SCALE = HEIGHT_D/HEIGHT;
+                }
+                WIDTH = Math.round(WIDTH*SCALE); 
+                HEIGHT = Math.round(HEIGHT*SCALE);
+                try {
+                    code = '{ "WIDTH":'+WIDTH+', "HEIGHT":'+HEIGHT+', "RE_START":'+RE_START+', "RE_END":'+RE_END+', "IM_START":'+IM_START+', "IM_END":'+IM_END+'}'
+                } catch {}
+                $("#code").html(code);
+            }
+        </script>
+        <script src="./drawing.js"></script>
+        <link href="./bootstrap.min.css" rel="stylesheet">
+        <style>
+            img {
+                height: fit-content;
+                width: fit-content;
+            }
+        </style>
+    </head>
+    <body onload="load()">
+        <div>
+        <!--<img src="output-rgb_4K.png" id="image" >-->
+            <canvas onload="startDraw()" id="Canvas" width="700" height="700"></canvas>
+        </div>
+        <p>
+            <b>
+                Current mode: <span id="mode"><b>Start</b></span> position
+                <br><button onClick="changeMode()" class="btn-primary" style="border-radius: 5px;">Change mode</button>
+                <br>
+                Coordinates: <span id="coordinates">0</span>
+                <br>
+                Code:
+                <div id="code"></div>
+            </br>
+        </p>
+    </body>
+</html>
