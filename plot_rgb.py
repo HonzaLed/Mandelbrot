@@ -35,6 +35,16 @@ try:
     RE_END = conf.get("RE_END")
     IM_START = conf.get("IM_START")
     IM_END = conf.get("IM_END")
+    try:
+        filename = conf.get("FILENAME")
+        print("JSON filename loaded!")
+    except:
+        filename = None
+    try:
+        MAX_ITER = conf.get("MAX_ITER")
+        print("JSON MAX_ITER loaded!")
+    except:
+        pass
     print("JSON conf loaded!")
 except:
     print("Failed to load JSON conf, using default one!")
@@ -62,8 +72,10 @@ for x in progressbar.progressbar(range(0, WIDTH)):
 
 
 #im.convert('RGB').save('output-rgb.png', 'PNG')
-filename = input("Enter filename to save image to (must end with .png, image will be saved in the images folder): ")
-filename = os.path.join("./images/" , filename)
+if filename == None:
+    filename = input("Enter filename to save image to (must end with .png, image will be saved in the images folder): ")
+if not "./images/" in filename:
+    filename = os.path.join("./images/" , filename)
 im.convert("RGB").save(filename, "PNG")
 print("RGB image successfully saved!")
 code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'" }'
