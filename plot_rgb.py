@@ -6,7 +6,7 @@ import tools
 import json
 import os
 
-MAX_ITER = 450
+MAX_ITER = 2000
 
 # Image size (pixels)
 
@@ -86,7 +86,7 @@ if not "./images/" in filename:
     filename = os.path.join("./images/" , filename)
 im.convert("RGB").save(filename, "PNG")
 print("RGB image successfully saved!")
-code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'" }'
+code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "MAX_ITER":'+str(MAX_ITER)+' }'
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))

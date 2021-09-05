@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw
+from math import log, log2
 from mandelbrot import mandelbrot
-
 import progressbar
 
 MAX_ITER = 200
@@ -9,11 +9,34 @@ MAX_ITER = 200
 WIDTH = 600
 HEIGHT = 400
 
+"""
+def mandelbrot(c):
+    z = 0
+    n = 0
+    while abs(z) <= 2 and n < MAX_ITER:
+        z = z*z + c
+        n += 1
+    if n == MAX_ITER:
+        return MAX_ITER
+    return n + 1 - log(log2(abs(z)))
+"""
+
 # Plot window
+"""
 RE_START = -2
 RE_END = 1
 IM_START = -1
 IM_END = 1
+"""
+
+WIDTH=590
+HEIGHT=813 
+RE_START=0.2501959510212734
+RE_END=0.2501959576356592
+IM_START=4.374688308858483e-06
+IM_END=4.383785287304268e-06
+#FILENAME="./images/elephants-waley-zoom7-test.png"
+MAX_ITER=10000
 
 palette = []
 

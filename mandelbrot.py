@@ -2,6 +2,7 @@ from math import log, log2
 
 #from six import print_
 #MAX_ITER = 80
+MAX_ITER=10000
 
 def mandelbrot_original(c):
     z = 0
