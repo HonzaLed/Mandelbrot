@@ -6,7 +6,7 @@ import tools
 import json
 import os
 
-MAX_ITER = 500
+MAX_ITER = 450
 
 # Image size (pixels)
 
@@ -17,15 +17,25 @@ RE_END = 1
 IM_START = -1
 IM_END = 1
 
+
+def mandelbrot(c):
+    z = 0
+    n = 0
+    while abs(z) < 2 and n < MAX_ITER:
+        z = z*z + c
+        n += 1
+    if n == MAX_ITER:
+        return MAX_ITER
+    return n + 1 - log(log2(abs(z)))
+"""
 def mandelbrot(c):
     z = 0
     n = 0
     while abs(z) <= 2 and n < MAX_ITER:
         z = z*z + c
         n += 1
-    if n == MAX_ITER:
-        return MAX_ITER
-    return n + 1 - log(log2(abs(z)))
+    return n
+"""
 
 try:
     conf = json.loads(input("Enter JSON configuration: "))
@@ -35,16 +45,14 @@ try:
     RE_END = conf.get("RE_END")
     IM_START = conf.get("IM_START")
     IM_END = conf.get("IM_END")
-    try:
+    if conf.get("FILENAME") is not None:
         filename = conf.get("FILENAME")
         print("JSON filename loaded!")
-    except:
+    else:
         filename = None
-    try:
+    if conf.get("MAX_ITER") is not None:
         MAX_ITER = conf.get("MAX_ITER")
-        print("JSON MAX_ITER loaded!")
-    except:
-        pass
+        print("JSON MAX_ITER loaded, settings MAX_ITER to",str(conf.get("MAX_ITER"))+"!")
     print("JSON conf loaded!")
 except:
     print("Failed to load JSON conf, using default one!")

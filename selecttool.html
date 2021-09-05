@@ -6,7 +6,8 @@
         <title>Mandelbrot plotter</title>
         <script>
             function load() {
-                conf = JSON.parse(prompt("Please enter JSON configuration"));
+                CODE_D = prompt("Please enter JSON configuration");
+                conf = JSON.parse(CODE_D);
                 WIDTH_D = conf.WIDTH;
                 HEIGHT_D = conf.HEIGHT;
                 WIDTH_END = conf.WIDTH;
