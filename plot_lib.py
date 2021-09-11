@@ -60,34 +60,29 @@ except:
     print("Failed to load JSON conf, using default one!")
 
 
-#im = Image.new('HSV', (WIDTH, HEIGHT), (0, 0, 0))
-#draw = ImageDraw.Draw(im)
-pointsREAL = []
-pointsIMAG = []
+im = Image.new('HSV', (WIDTH, HEIGHT), (0, 0, 0))
+draw = ImageDraw.Draw(im)
+
 for x in progressbar.progressbar(range(0, WIDTH)):
     for y in range(0, HEIGHT):
         # Convert pixel coordinate to complex number
-        xnum = RE_START + (x / WIDTH) * (RE_END - RE_START)
-        ynum = IM_START + (y / HEIGHT) * (IM_END - IM_START)
-        c = complex(xnum, ynum)
+        c = complex(RE_START + (x / WIDTH) * (RE_END - RE_START),
+                    IM_START + (y / HEIGHT) * (IM_END - IM_START))
         # Compute the number of iterations
         m = mandelbrot(c)
-        if m == MAX_ITER:
-            pointsREAL.append(xnum)
-            pointsIMAG.append(ynum)
-
         # The color depends on the number of iterations
-#        hue = int(255 * m / MAX_ITER)
-#        saturation = 255
-#        if m < MAX_ITER:
-#            value = 255
-#        else:
-#           value = 0
+        hue = int(255 * m / MAX_ITER)
+        saturation = 255
+        if m < MAX_ITER:
+            value = 255
+        else:
+            value = 0
         # Plot the point
-#        draw.point([x, y], (hue, saturation, value))
+        draw.point([x, y], (hue, saturation, value))
 
 
 #im.convert('RGB').save('output-rgb.png', 'PNG')
+"""
 if filename == None:
     filename = input("Enter filename to save image to (must end with .png, image will be saved in the images folder): ")
 if not "./images/" in filename:
@@ -99,10 +94,10 @@ code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))
+"""
 print()
 print("Configuration of the current image:")
 print(str(code))
 
-plt.axis('equal')
-plt.fill(pointsREAL,pointsIMAG)
+plt.imshow(im, extent=[RE_START, RE_END, IM_START, IM_END])
 plt.show()

@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 from PIL import Image, ImageDraw
 from math import log, log2
 import progressbar
@@ -96,5 +94,3 @@ with open(filename+".conf", "w") as file:
 print()
 print("Configuration of the current image:")
 print(str(code))
-
-plt.imshow(imRGB)
