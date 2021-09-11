@@ -59,8 +59,8 @@ def thread_worker(thread_id):
             value = 0
         # Plot the point
         draw.point([x, y], (hue, saturation, value))
-        DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by thread "+str(thread_id))
-    DEBUG.append("Completed thread "+str(thread_id))
+        #DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by thread "+str(thread_id))
+    #DEBUG.append("Completed thread "+str(thread_id))
 
 def main_thread_worker(thread_id):
     with progressbar.ProgressBar(max_value=WIDTH*HEIGHT) as bar:
@@ -80,8 +80,8 @@ def main_thread_worker(thread_id):
             # Plot the point
             draw.point([x, y], (hue, saturation, value))
             bar.update((WIDTH*HEIGHT)-data.qsize())
-            DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by main thread")
-        DEBUG.append("Completed main thread")
+            #DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by main thread")
+        #DEBUG.append("Completed main thread")
     print("Completed all work on main thread, size of queue is ",data.qsize())
 
 try:
@@ -134,7 +134,7 @@ if not "./images/" in filename:
 imRGB = im.convert("RGB")
 imRGB.save(filename, "PNG")
 print("RGB image successfully saved!")
-code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'" }'
+code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "THREADS":'+str(THREADS)+' }'
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))
@@ -142,7 +142,7 @@ print()
 print("Configuration of the current image:")
 print(str(code))
 
-with open("latest.log", "w") as file:
-    for i in DEBUG:
-        file.write(str(i)+"\n")
-print("Debug file writed!")
+#with open("latest.log", "w") as file:
+#    for i in DEBUG:
+#        file.write(str(i)+"\n")
+#print("Debug file writed!")
