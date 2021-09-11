@@ -119,8 +119,8 @@ for x in progressbar.progressbar(range(0, WIDTH)):
         data.put([x,y,c])
 
 for i in range(THREADS):
-    _thread.start_new_thread(thread_worker, (i,))
-    #threading.Thread(target=thread_worker, daemon=True).start()
+    #_thread.start_new_thread(thread_worker, (i,))
+    threading.Thread(target=thread_worker, args=(i,), daemon=True).start()
 
 main_thread_worker(THREADS)
 #data.join()
