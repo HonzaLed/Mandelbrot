@@ -60,25 +60,31 @@ except:
     print("Failed to load JSON conf, using default one!")
 
 
-im = Image.new('HSV', (WIDTH, HEIGHT), (0, 0, 0))
-draw = ImageDraw.Draw(im)
-
+#im = Image.new('HSV', (WIDTH, HEIGHT), (0, 0, 0))
+#draw = ImageDraw.Draw(im)
+pointsREAL = []
+pointsIMAG = []
 for x in progressbar.progressbar(range(0, WIDTH)):
     for y in range(0, HEIGHT):
         # Convert pixel coordinate to complex number
-        c = complex(RE_START + (x / WIDTH) * (RE_END - RE_START),
-                    IM_START + (y / HEIGHT) * (IM_END - IM_START))
+        xnum = RE_START + (x / WIDTH) * (RE_END - RE_START)
+        ynum = IM_START + (y / HEIGHT) * (IM_END - IM_START)
+        c = complex(xnum, ynum)
         # Compute the number of iterations
         m = mandelbrot(c)
+        if m == MAX_ITER:
+            pointsREAL.append(xnum)
+            pointsIMAG.append(ynum)
+
         # The color depends on the number of iterations
-        hue = int(255 * m / MAX_ITER)
-        saturation = 255
-        if m < MAX_ITER:
-            value = 255
-        else:
-            value = 0
+#        hue = int(255 * m / MAX_ITER)
+#        saturation = 255
+#        if m < MAX_ITER:
+#            value = 255
+#        else:
+#           value = 0
         # Plot the point
-        draw.point([x, y], (hue, saturation, value))
+#        draw.point([x, y], (hue, saturation, value))
 
 
 #im.convert('RGB').save('output-rgb.png', 'PNG')
@@ -97,4 +103,6 @@ print()
 print("Configuration of the current image:")
 print(str(code))
 
-plt.imshow(imRGB)
+plt.axis('equal')
+plt.fill(pointsREAL,pointsIMAG)
+plt.show()
