@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 from PIL import Image, ImageDraw
 from math import log, log2
 import progressbar
@@ -6,7 +8,7 @@ import tools
 import json
 import os
 
-MAX_ITER = 2000
+MAX_ITER = 450
 
 # Image size (pixels)
 
@@ -80,6 +82,7 @@ for x in progressbar.progressbar(range(0, WIDTH)):
 
 
 #im.convert('RGB').save('output-rgb.png', 'PNG')
+"""
 if filename == None:
     filename = input("Enter filename to save image to (must end with .png, image will be saved in the images folder): ")
 if not "./images/" in filename:
@@ -87,10 +90,14 @@ if not "./images/" in filename:
 imRGB = im.convert("RGB")
 imRGB.save(filename, "PNG")
 print("RGB image successfully saved!")
-code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "MAX_ITER":'+str(MAX_ITER)+' }'
+code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'" }'
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))
+"""
 print()
 print("Configuration of the current image:")
 print(str(code))
+
+plt.imshow(im, extent=[RE_START, RE_END, IM_START, IM_END])
+plt.show()
