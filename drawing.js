@@ -37,11 +37,14 @@ Markers[0].YPos = -25;
 Markers[1].XPos = -25;
 Markers[1].YPos = -25;
 
+var mouseXPos = 0;
+var mouseYPos = 0;
+
 var mouseClicked = function (mouse) {
     // Get current mouse coords
     var rect = canvas.getBoundingClientRect();
-    var mouseXPos = (mouse.x - rect.left);
-    var mouseYPos = (mouse.y - rect.top);
+    mouseXPos = (mouse.x - rect.left);
+    mouseYPos = (mouse.y - rect.top);
 
     console.log("Marker added");
 

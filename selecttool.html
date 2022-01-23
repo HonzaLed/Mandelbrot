@@ -26,7 +26,8 @@
             }
 
             function changeIter() {
-                MAX_ITER = prompt("New MAX_ITER:").toString()
+                MAX_ITER = prompt("New MAX_ITER:").toString();
+                calculate(mouseXPos, mouseYPos);
             }
 
             function changeMode() {
@@ -37,6 +38,11 @@
                     modeStart = true;
                     $("#mode")[0].innerText = "start";
                 }
+            }
+
+            function changeFilename() {
+                FILENAME = "./images/"+prompt("New filename:");
+                calculate(mouseXPos, mouseYPos);
             }
 
             $(function(){
@@ -92,6 +98,7 @@
                 Current mode: <span id="mode"><b>Start</b></span> position
                 <br><button onClick="changeMode()" class="btn-primary" style="border-radius: 5px;">Change mode</button>
                 <br><button onClick="changeIter()" class="btn-primary" style="border-radius: 5px;">Change MAX_ITER</button>
+                <br><button onClick="changeFilename()" class="btn-primary" style="border-radius: 5px;">Change FILENAME</button>
                 <br>
                 Coordinates: <span id="coordinates">0</span>
                 <br>

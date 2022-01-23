@@ -45,7 +45,8 @@ def mandelbrot(c):
 DEBUG = []
 
 def thread_worker(args):
-    x,y,c = args
+    #x,y,c = args
+    c=args
     m = mandelbrot(c)
     # The color depends on the number of iterations
     hue = int(255 * m / MAX_ITER)
@@ -56,7 +57,7 @@ def thread_worker(args):
         value = 0
     ## Plot the point
     #draw.point([x, y], (hue, saturation, value))
-    return x,y,hue,saturation,value
+    return hue,saturation,value
         #DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by thread "+str(thread_id))
     #DEBUG.append("Completed thread "+str(thread_id))
 
@@ -126,7 +127,7 @@ for x in progressbar.progressbar(range(0, WIDTH)):
         c = complex(RE_START + (x / WIDTH) * (RE_END - RE_START),
                     IM_START + (y / HEIGHT) * (IM_END - IM_START))
         # Compute the number of iterations
-        args.append([x,y,c])
+        args.append(c)
 
 """
 processes=[]
@@ -145,7 +146,7 @@ with mp.Pool(THREADS) as p:
 index=0
 for x in progressbar.progressbar(range(0, WIDTH)):
     for y in range(0, HEIGHT):
-        draw.point([x, y], (result[index][2], result[index][3], result[index][4]))
+        draw.point([x, y], (result[index][0], result[index][1], result[index][2]))
         index+=1
 
 #main_thread_worker(THREADS)
