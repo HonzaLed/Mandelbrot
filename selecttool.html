@@ -16,7 +16,8 @@
                 RE_END_D = conf.RE_END;
                 IM_START_D = conf.IM_START;
                 IM_END_D = conf.IM_END;
-                FILENAME = conf.FILENAME
+                FILENAME = conf.FILENAME;
+                MAX_ITER = conf.MAX_ITER;
                 //$("#image")[0].src = "./"+FILENAME
                 modeStart = true;
                 WIDTH_START = 0;
@@ -63,7 +64,7 @@
                 WIDTH = Math.round(WIDTH*SCALE); 
                 HEIGHT = Math.round(HEIGHT*SCALE);
                 try {
-                    code = '{ "WIDTH":'+WIDTH+', "HEIGHT":'+HEIGHT+', "RE_START":'+RE_START+', "RE_END":'+RE_END+', "IM_START":'+IM_START+', "IM_END":'+IM_END+'}'
+                    code = '{ "WIDTH":'+WIDTH+', "HEIGHT":'+HEIGHT+', "RE_START":'+RE_START+', "RE_END":'+RE_END+', "IM_START":'+IM_START+', "IM_END":'+IM_END+', "MAX_ITER":'+MAX_ITER+', "FILENAME":'+FILENAME+'}'
                 } catch {}
                 $("#code").html(code);
             }

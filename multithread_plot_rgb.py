@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw
 from math import log, log2
 import progressbar
-import threading
+import multiprocessing as mp
 import colorsys
 import _thread
 import queue
@@ -19,9 +19,10 @@ RE_END = 1
 IM_START = -1
 IM_END = 1
 filename = None
-THREADS = 20
+THREADS = 2
 
-data = queue.Queue()
+#data = queue.Queue()
+args=[]
 
 def mandelbrot(c):
     z = 0
@@ -43,42 +44,41 @@ def mandelbrot(c):
 """
 DEBUG = []
 
-def thread_worker(thread_id):
-    while True:
-        try:
-            x,y,c = data.get_nowait()
-        except queue.Empty:
-            break
-        m = mandelbrot(c)
-        # The color depends on the number of iterations
-        hue = int(255 * m / MAX_ITER)
-        saturation = 255
-        if m < MAX_ITER:
-            value = 255
-        else:
-            value = 0
-        # Plot the point
-        draw.point([x, y], (hue, saturation, value))
+def thread_worker(args):
+    x,y,c = args
+    m = mandelbrot(c)
+    # The color depends on the number of iterations
+    hue = int(255 * m / MAX_ITER)
+    saturation = 255
+    if m < MAX_ITER:
+        value = 255
+    else:
+        value = 0
+    ## Plot the point
+    #draw.point([x, y], (hue, saturation, value))
+    return x,y,hue,saturation,value
         #DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by thread "+str(thread_id))
     #DEBUG.append("Completed thread "+str(thread_id))
 
 def main_thread_worker(thread_id):
     with progressbar.ProgressBar(max_value=WIDTH*HEIGHT) as bar:
         while True:
-            try:
-                x,y,c = data.get_nowait()
-            except queue.Empty:
-                break
-            m = mandelbrot(c)
+            #try:
+            #    x,y,c = data.get_nowait()
+            #except queue.Empty:
+            #    break
+            #m = mandelbrot(c)
             # The color depends on the number of iterations
-            hue = int(255 * m / MAX_ITER)
-            saturation = 255
-            if m < MAX_ITER:
-                value = 255
-            else:
-                value = 0
+            #hue = int(255 * m / MAX_ITER)
+            #saturation = 255
+            #if m < MAX_ITER:
+            #    value = 255
+            #else:
+            #    value = 0
             # Plot the point
-            draw.point([x, y], (hue, saturation, value))
+            #draw.point([x, y], (hue, saturation, value))
+            if data.qsize() == 0:
+                break
             bar.update((WIDTH*HEIGHT)-data.qsize())
             #DEBUG.append("Proccessed point X: "+str(x)+",Y: "+str(y)+",C: "+str(c)+" by main thread")
         #DEBUG.append("Completed main thread")
@@ -92,16 +92,25 @@ try:
     RE_END = conf.get("RE_END")
     IM_START = conf.get("IM_START")
     IM_END = conf.get("IM_END")
-    if conf.get("FILENAME") is not None and type(conf.get("FILENAME")) == str:
-        filename = conf.get("FILENAME")
-        print("JSON filename loaded!")
-    else:
+    try:
+        if conf.get("FILENAME") is not None and type(conf.get("FILENAME")) == str:
+            filename = conf.get("FILENAME")
+            print("JSON filename loaded!")
+        else:
+            filename = None
+    except:
         filename = None
-    if conf.get("MAX_ITER") is not None and type(conf.get("MAX_ITER")) == int:
-        MAX_ITER = conf.get("MAX_ITER")
-        print("JSON MAX_ITER loaded, settings MAX_ITER to",str(conf.get("MAX_ITER"))+"!")
-    if conf.get("THREADS") is not None and type(conf.get("THREADS")) == int:
-        THREADS = conf.get("THREADS")
+    try:
+        if conf.get("MAX_ITER") is not None and type(conf.get("MAX_ITER")) == int:
+            MAX_ITER = conf.get("MAX_ITER")
+            print("JSON MAX_ITER loaded, settings MAX_ITER to",str(conf.get("MAX_ITER"))+"!")
+    except:
+        pass
+    try:
+        if conf.get("THREADS") is not None and type(conf.get("THREADS")) == int:
+            THREADS = conf.get("THREADS")
+    except:
+        pass
     print("JSON conf loaded!")
 except:
     print("Failed to load JSON conf, using default one!")
@@ -116,15 +125,29 @@ for x in progressbar.progressbar(range(0, WIDTH)):
         c = complex(RE_START + (x / WIDTH) * (RE_END - RE_START),
                     IM_START + (y / HEIGHT) * (IM_END - IM_START))
         # Compute the number of iterations
-        data.put([x,y,c])
+        args.append([x,y,c])
 
+"""
+processes=[]
 for i in range(THREADS):
     #_thread.start_new_thread(thread_worker, (i,))
-    threading.Thread(target=thread_worker, args=(i,), daemon=True).start()
+    processes.append(mp.Process(target=thread_worker, args=(i,draw,data)))
+for i in processes:
+    i.start()
+for i in processes:
+    i.join()
+"""
 
-main_thread_worker(THREADS)
-#data.join()
+with mp.Pool(THREADS) as p:
+    result = p.map(thread_worker, args)
 
+index=0
+for x in progressbar.progressbar(range(0, WIDTH)):
+    for y in range(0, HEIGHT):
+        draw.point([x, y], (result[index][2], result[index][3], result[index][4]))
+        index+=1
+
+#main_thread_worker(THREADS)
 
 #im.convert('RGB').save('output-rgb.png', 'PNG')
 if filename == None:
@@ -134,7 +157,7 @@ if not "./images/" in filename:
 imRGB = im.convert("RGB")
 imRGB.save(filename, "PNG")
 print("RGB image successfully saved!")
-code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "THREADS":'+str(THREADS)+' }'
+code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "MAX_ITER":'+MAX_ITER+', "THREADS":'+str(THREADS)+' }'
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))
