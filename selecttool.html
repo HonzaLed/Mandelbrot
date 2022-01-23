@@ -64,7 +64,7 @@
                 WIDTH = Math.round(WIDTH*SCALE); 
                 HEIGHT = Math.round(HEIGHT*SCALE);
                 try {
-                    code = '{ "WIDTH":'+WIDTH+', "HEIGHT":'+HEIGHT+', "RE_START":'+RE_START+', "RE_END":'+RE_END+', "IM_START":'+IM_START+', "IM_END":'+IM_END+', "MAX_ITER":'+MAX_ITER+', "FILENAME":'+FILENAME+'}'
+                    code = '{ "WIDTH":'+WIDTH+', "HEIGHT":'+HEIGHT+', "RE_START":'+RE_START+', "RE_END":'+RE_END+', "IM_START":'+IM_START+', "IM_END":'+IM_END+', "MAX_ITER":'+MAX_ITER+', "FILENAME":"'+FILENAME+'"}'
                 } catch {}
                 $("#code").html(code);
             }

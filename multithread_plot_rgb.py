@@ -157,7 +157,7 @@ if not "./images/" in filename:
 imRGB = im.convert("RGB")
 imRGB.save(filename, "PNG")
 print("RGB image successfully saved!")
-code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "MAX_ITER":'+MAX_ITER+', "THREADS":'+str(THREADS)+' }'
+code = '{ "WIDTH":'+str(WIDTH)+', "HEIGHT":'+str(HEIGHT)+', "RE_START":'+str(RE_START)+', "RE_END":'+str(RE_END)+', "IM_START":'+str(IM_START)+', "IM_END":'+str(IM_END)+', "FILENAME":"'+str(filename)+'", "MAX_ITER":'+str(MAX_ITER)+', "THREADS":'+str(THREADS)+' }'
 
 with open(filename+".conf", "w") as file:
     file.write(str(code))
