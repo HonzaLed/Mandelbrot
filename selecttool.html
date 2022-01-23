@@ -25,6 +25,10 @@
                 startDraw();
             }
 
+            function changeIter() {
+                MAX_ITER = prompt("New MAX_ITER:").toString()
+            }
+
             function changeMode() {
                 if (modeStart) {
                     modeStart = false;
@@ -87,6 +91,7 @@
             <b>
                 Current mode: <span id="mode"><b>Start</b></span> position
                 <br><button onClick="changeMode()" class="btn-primary" style="border-radius: 5px;">Change mode</button>
+                <br><button onClick="changeIter()" class="btn-primary" style="border-radius: 5px;">Change MAX_ITER</button>
                 <br>
                 Coordinates: <span id="coordinates">0</span>
                 <br>
