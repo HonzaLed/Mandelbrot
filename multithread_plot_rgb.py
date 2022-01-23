@@ -109,6 +109,7 @@ try:
     try:
         if conf.get("THREADS") is not None and type(conf.get("THREADS")) == int:
             THREADS = conf.get("THREADS")
+            print("Loaded JSON Threads, setting it to",THREADS)
     except:
         pass
     print("JSON conf loaded!")
